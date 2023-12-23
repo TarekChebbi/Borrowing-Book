@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+  Liste des emprunts
+{% endblock %}
+
+{% block body %}
+  {{ form_start(form) }}
+  <div class="d-flex flex-row justify-content-center align-items-left">
+    <div class="col">{{ form_row(form.book) }}</div>
+    <div class="col">{{ form_row(form.month) }}</div> {# Add this line for the month field #}
+    <div class="col">
+      <div class="form-group">
+        <button type="submit" class="btn btn-warning">Search</button>
+      </div>
+    </div>
+  </div>
+  {{ form_end(form) }}
+
+  {% if borrowings %}
+    {% if form.month is defined and form.month is not empty %}
+      <p>Displaying borrowings for {{ form.month.vars.value }}</p>
+    {% endif %}
+    <table id="borrowing" class="table table-striped">
+      <thead>
+        <tr>
+          <th>Student name</th>
+          <th>Student surname</th>
+          <td>Date borrowed</td>
+          <td>Book returned</td>
+        </tr>
+      </thead>
+      <tbody>
+        {% for borrowing in borrowings %}
+          <tr>
+            <td>{{ borrowing.student.name }}</td>
+            <td>{{ borrowing.student.surname }}</td>
+            <td>{{ borrowing.dateBorrowed|date('Y-m-d') }}</td>
+            <td>{{ borrowing.bookReturned ? 'Yes' : 'No' }}</td>
+            <td>
+              {# Additional actions if needed #}
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <a href="{{ path('app_borrowing_index') }}" class="btn btn-secondary">Back to list</a>
+  {% else %}
+    <p>No borrowing found</p>
+  {% endif %}
+{% endblock %}
